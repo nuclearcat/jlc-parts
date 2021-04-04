@@ -6,6 +6,13 @@
 #sed -i "s/'admin'/'admin2'/g" phpliteadmin.config.sample.php
 #apt install gnumeric
 
+if ! [ -x "$(command -v ssconvert)" ];
+then
+    echo "ssconvert from gnumeric not found, you can install in Debian/Ubuntu by:"
+    echo "sudo apt-get install gnumeric"
+    exit
+fi
+
 # Check if file older than 24h
 if [ ! -f jlc.xls ] || [ "`find jlc.xls -mmin +1440`" ]; then
   echo Updating jlc.xls
