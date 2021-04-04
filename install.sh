@@ -13,8 +13,13 @@ if [ ! -f jlc.xls ] || [ "`find jlc.xls -mmin +1440`" ]; then
   wget -O jlc.xls https://jlcpcb.com/componentSearch/uploadComponentInfo
 fi
 
-echo Delete old db
-rm db/.jlc.sqlite
+if [ ! -d "db" ]; then
+    mkdir db
+else
+    echo Delete old db
+    rm db/.jlc.sqlite
+fi
+
 
 echo Convert it to CSV
 ssconvert jlc.xls jlc.csv
@@ -35,5 +40,5 @@ echo "drop table jlctmp" | sqlite3 db/.jlc.sqlite
 echo "Optional delete 0 stock items"
 echo "DELETE FROM jlc WHERE Stock=0" | sqlite3 db/.jlc.sqlite
 
-echo "Ownership (ubuntu specific stuff)"
-chown -R www-data db
+#echo "Ownership (ubuntu specific stuff) if you want to use it on web-server"
+#chown -R www-data db
