@@ -14,6 +14,7 @@ then
 fi
 
 # Check if file older than 24h
+# Cache it for 24h to not make load on JLC servers
 if [ ! -f jlc.xls ] || [ "`find jlc.xls -mmin +1440`" ]; then
   echo Updating jlc.xls
   rm jlc.xls
@@ -44,8 +45,9 @@ rm .tmp.schema
 echo "INSERT INTO jlc SELECT * FROM jlctmp" | sqlite3 db/.jlc.sqlite
 echo "drop table jlctmp" | sqlite3 db/.jlc.sqlite
 
-echo "Optional delete 0 stock items"
+echo "Optional: delete 0 stock items"
 echo "DELETE FROM jlc WHERE Stock=0" | sqlite3 db/.jlc.sqlite
 
 #echo "Ownership (ubuntu specific stuff) if you want to use it on web-server"
 #chown -R www-data db
+
