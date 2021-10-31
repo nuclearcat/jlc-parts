@@ -15,7 +15,7 @@ fi
 
 # Check if file older than 24h
 # Cache it for 24h to not make load on JLC servers
-if [ ! -f jlc.xls ] || [ "`find jlc.xls -mmin +1440`" ]; then
+if [ ! -f jlc.csv ] || [ "`find jlc.csv -mmin +1440`" ]; then
   echo Updating jlc.xls
   rm jlc.xls
   wget -O jlc.xls https://jlcpcb.com/componentSearch/uploadComponentInfo
@@ -29,11 +29,15 @@ else
 fi
 
 
-echo Convert it to CSV
-ssconvert jlc.xls jlc.csv
+# JLC xls actually CSV!
+mv jlc.xls jlc.csv
+
+python3 fixjlccsv.py
 
 echo Import CSV
 sqlite3 db/.jlc.sqlite < import.sql
+
+rm jlc_fixed.csv
 
 echo Convert stock and solder_joint fields to integer for proper sorting
 echo ".schema jlc" | sqlite3 db/.jlc.sqlite > .tmp.schema
@@ -47,6 +51,7 @@ echo "drop table jlctmp" | sqlite3 db/.jlc.sqlite
 
 echo "Optional: delete 0 stock items"
 echo "DELETE FROM jlc WHERE Stock=0" | sqlite3 db/.jlc.sqlite
+
 
 #echo "Ownership (ubuntu specific stuff) if you want to use it on web-server"
 #chown -R www-data db

@@ -1,3 +1,3 @@
 .mode csv
-.import jlc.csv jlc
+.import jlc_fixed.csv jlc
 UPDATE jlc SET Stock = CAST(Stock AS INTEGER)
