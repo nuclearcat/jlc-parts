@@ -14,7 +14,8 @@ with open('jlc.csv', encoding= 'unicode_escape') as csvfile:
         if (linenum == 1):
           fixed_csv.writerow(row)
           continue
-
+        del row[-1]
+        
         row[8]=row[8].replace("\xa1\xc0",'±')
         row[8]=row[8].replace("\xa1\xe6",'°C')
         row[8]=row[8].replace("\xa6\xb8",'Ω')
