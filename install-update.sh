@@ -44,6 +44,7 @@ echo ".schema jlc" | sqlite3 db/.jlc.sqlite > .tmp.schema
 echo "alter table jlc rename to jlctmp" | sqlite3 db/.jlc.sqlite
 sed -i 's/"Stock" TEXT/"Stock" INTEGER/g' .tmp.schema
 sed -i 's/"Solder Joint" TEXT/"Solder Joint" INTEGER/g' .tmp.schema
+sed -i 's/"Price" TEXT/"Price" INTEGER/g' .tmp.schema
 cat .tmp.schema | sqlite3 db/.jlc.sqlite
 rm .tmp.schema
 echo "INSERT INTO jlc SELECT * FROM jlctmp" | sqlite3 db/.jlc.sqlite
